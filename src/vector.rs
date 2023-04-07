@@ -1,6 +1,6 @@
-use std::ops::{Add, Sub, Mul, Div, Neg};
+use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign};
 
-pub trait V3: Sized + Add + Sub + Neg + Mul<f32, Output = Self> + Div<f32, Output = Self> + Copy {
+pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f32, Output = Self> + Div<f32, Output = Self> + DivAssign<f32> + Copy {
 	fn new(x: f32, y: f32, z: f32) -> Self;
 	fn x(&self) -> f32;
 	fn y(&self) -> f32;
@@ -54,6 +54,11 @@ impl Add for Vector3 {
 		}
 	}
 }
+impl AddAssign for Vector3 {
+	fn add_assign(&mut self, rhs: Self) {
+		*self = *self + rhs;
+	}
+}
 impl Sub for Vector3 {
 	type Output = Vector3;
 	fn sub(self, rhs: Self) -> Self::Output {
@@ -80,6 +85,15 @@ impl Div<f32> for Vector3 {
 	type Output = Vector3;
 	fn div(self, rhs: f32) -> Self::Output {
 		Vector3 {
+			x: self.x / rhs,
+			y: self.y / rhs,
+			z: self.z / rhs,
+		}
+	}
+}
+impl DivAssign<f32> for Vector3 {
+	fn div_assign(&mut self, rhs: f32) {
+		*self = Vector3 {
 			x: self.x / rhs,
 			y: self.y / rhs,
 			z: self.z / rhs,

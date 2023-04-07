@@ -7,27 +7,21 @@ mod sphere;
 mod color;
 mod ray;
 use ray::Ray;
+mod utils;
+mod camera;
+use camera::Camera;
+
+use crate::color::Color;
 
 fn main() {
 	// Imagen
 	let aspect_ratio: f32 = 16.0/9.0;
 	let image_width: u16 = 400;
 	let image_height = (image_width as f32 /aspect_ratio) as u16;
+	let samples_per_pixel: u8 = 50;
 
-	// Camara
-
-	let viewport_height = 2.0;
-	let viewport_width = aspect_ratio*viewport_height;
-	let focal_length = 1.0;
-
-	let origin = Vector3::zero();
-	let horizontal = Vector3::new(viewport_width, 0.0, 0.0);
-	let vertical = Vector3::new(0.0, viewport_height, 0.0);
-
-	let lower_left_corner = origin - horizontal/2.0 - vertical/2.0 - Vector3::new(0.0, 0.0, focal_length);
-	
 	// Render
-
+	let camera = Camera::default();
 	// Esta en ascii
 	println!("P3");
 	// filas y columnas
@@ -40,11 +34,14 @@ fn main() {
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);
 		for x in 0..image_width {
-			let u = x as f32/ (image_width-1) as f32;
-            let v = y as f32/ (image_height-1) as f32;
-			let r = Ray::new(origin, lower_left_corner + u*horizontal + v*vertical - origin);
-
-			let color = r.color(&scene);
+			let mut color = Color::black();
+			for _ in 0..samples_per_pixel {
+				let u = (x as f32 + fastrand::f32())/ (image_width-1) as f32;
+            	let v = (y as f32 + fastrand::f32())/ (image_height-1) as f32;
+                let ray = camera.get_ray(u, v);
+                color += ray.color(&scene);
+            }
+			color /= samples_per_pixel as f32;
 			println!("{}", color.as_string_255());
 		}
 	}

@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Mul, Div, Neg};
+use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign};
 use super::vector::V3;
 
 #[derive(Debug, Clone, Copy)]
@@ -26,6 +26,11 @@ impl Add for Color {
 			g: self.g + rhs.g,
 			b: self.b + rhs.b,
 		}
+	}
+}
+impl AddAssign for Color {
+	fn add_assign(&mut self, rhs: Self) {
+		*self = *self + rhs;
 	}
 }
 impl Sub for Color {
@@ -60,6 +65,15 @@ impl Div<f32> for Color {
 		}
 	}
 }
+impl DivAssign<f32> for Color {
+	fn div_assign(&mut self, rhs: f32) {
+		*self = Color {
+			r: self.r / rhs,
+			g: self.g / rhs,
+			b: self.b / rhs,
+		}
+	}
+}
 impl V3 for Color {
 	fn new(r: f32, g: f32, b: f32) -> Self {
 		Color { r, g, b }
@@ -77,5 +91,8 @@ impl V3 for Color {
 impl Color {
 	pub fn as_string_255(&self) -> String {
 		format!("{} {} {}", (255.0*self.r) as u8, (255.0*self.g) as u8, (255.0*self.b) as u8) 
+	}
+	pub fn black() -> Self {
+		Color{r:0.0, g:0.0, b:0.0}
 	}
 }
