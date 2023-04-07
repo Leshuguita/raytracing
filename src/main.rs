@@ -1,6 +1,8 @@
+mod scene;
+use scene::Scene;
 mod vector;
 use vector::{V3, Vector3};
-
+mod sphere;
 mod color;
 mod ray;
 use ray::Ray;
@@ -32,13 +34,15 @@ fn main() {
 	// valor maximo
 	println!("255");
 
+	let scene = Scene::default();
+
 	for y in (0..image_height).rev() {
 		for x in 0..image_width {
 			let u = x as f32/ (image_width-1) as f32;
             let v = y as f32/ (image_height-1) as f32;
 			let r = Ray::new(origin, lower_left_corner + u*horizontal + v*vertical - origin);
 
-			let color = r.color();
+			let color = r.color(&scene);
 			println!("{}", color.as_string_255());
 		}
 	}

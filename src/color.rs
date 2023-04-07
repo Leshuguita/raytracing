@@ -61,8 +61,8 @@ impl Div<f32> for Color {
 	}
 }
 impl V3 for Color {
-	fn new(x: f32, y: f32, z: f32) -> Self {
-		Color { r:x, g:y, b:z }
+	fn new(r: f32, g: f32, b: f32) -> Self {
+		Color { r, g, b }
 	}
 	fn x(&self) -> f32 {
 		self.r
