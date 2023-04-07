@@ -100,3 +100,8 @@ impl V3 for Vector3 {
 		self.z
 	}
 }
+impl Vector3 {
+	pub fn zero() -> Self {
+		Vector3::new(0.0,0.0,0.0)
+	}
+}
