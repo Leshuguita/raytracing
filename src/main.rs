@@ -2,6 +2,7 @@ mod scene;
 use scene::Scene;
 mod vector;
 use vector::{V3, Vector3};
+mod hittable;
 mod sphere;
 mod color;
 mod ray;
@@ -37,6 +38,7 @@ fn main() {
 	let scene = Scene::default();
 
 	for y in (0..image_height).rev() {
+		eprintln!("{}/{} filas", image_height-y, image_height);
 		for x in 0..image_width {
 			let u = x as f32/ (image_width-1) as f32;
             let v = y as f32/ (image_height-1) as f32;

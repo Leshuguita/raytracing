@@ -1,13 +1,26 @@
-use crate::{sphere::Sphere, vector::{Vector3, V3}};
+use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}};
 pub struct Scene {
-	pub spheres: Vec<Sphere>,
+	// El tutorial usa el equivalente a Vec<Arc<T>>, dice que para que puedan
+	// compartir texturas y eso. No se si sea necesario, por ahora lo voy a
+	// dejar sin, y despues lo cambio si se necesita
+	pub hittables: Vec<Box<dyn Hittable>>,
 }
 impl Scene {
 	pub fn default() -> Self {
 		Scene {
-			spheres: vec![
-				Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5),
+			hittables: vec![
+				Box::new(Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5)),
+				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0)),
 			]
 		}
+	}
+}
+impl Hittable for Scene {
+	fn hit(&self, ray: &Ray, min_dist: f32, max_dist: f32) -> Option<Hit> {
+		let mut hit: Option<Hit> = None;
+    	for object in &self.hittables {
+        	hit = object.hit(ray, min_dist, hit.map(|h| h.distance).unwrap_or(max_dist));
+    	}
+		hit
 	}
 }
