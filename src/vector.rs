@@ -171,4 +171,7 @@ impl Vector3 {
 			-unit
 		}
 	}
+	pub fn reflect(&self, normal: &Vector3) -> Vector3 {
+		*self - 2.0*self.dot(*normal)*(*normal)
+	}
 }

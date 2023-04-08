@@ -31,7 +31,7 @@ fn main() {
 	// valor maximo
 	println!("255");
 
-	let scene = Scene::default();
+	let scene = Scene::metal_balls();
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);

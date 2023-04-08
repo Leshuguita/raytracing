@@ -16,7 +16,7 @@ impl Ray {
 			return Color::black();
 		}
 		if let Some(hit) = scene.hit(self, 0.001, f64::INFINITY) {
-			if let Some((scattered_ray, atennuation)) = hit.material.scatter(&hit) {
+			if let Some((scattered_ray, atennuation)) = hit.material.scatter(self, &hit) {
 				return atennuation*scattered_ray.color(scene, depth-1);
 			}
 			return Color::black();
