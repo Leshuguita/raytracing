@@ -15,7 +15,7 @@ impl Ray {
 		if depth==0 {
 			return Color::black();
 		}
-		if let Some(hit) = scene.hit(self, 0.0, f64::INFINITY) {
+		if let Some(hit) = scene.hit(self, 0.001, f64::INFINITY) {
 			let target = hit.point + hit.normal + Vector3::random_unit();
 			let new_ray = Ray::new(hit.point, target-hit.point);
 			return 0.5*new_ray.lambert_color(scene, depth-1);
@@ -28,7 +28,7 @@ impl Ray {
 		if depth==0 {
 			return Color::black();
 		}
-		if let Some(hit) = scene.hit(self, 0.0, f64::INFINITY) {
+		if let Some(hit) = scene.hit(self, 0.001, f64::INFINITY) {
 			let target = hit.point + hit.normal + Vector3::random_in_hemisphere(hit.normal);
 			let new_ray = Ray::new(hit.point, target-hit.point);
 			return 0.5*new_ray.hemisphere_color(scene, depth-1);

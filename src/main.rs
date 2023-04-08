@@ -40,7 +40,7 @@ fn main() {
 				let u = (x as f64 + fastrand::f64())/ (image_width-1) as f64;
             	let v = (y as f64 + fastrand::f64())/ (image_height-1) as f64;
                 let ray = camera.get_ray(u, v);
-                color += ray.hemisphere_color(&scene, max_ray_iterations);
+                color += ray.lambert_color(&scene, max_ray_iterations);
             }
 			color *= 1.0/samples_per_pixel as f64;
 			println!("{}", color.gamma_2().as_string_255());
