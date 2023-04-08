@@ -19,8 +19,13 @@ impl Hittable for Scene {
 	fn hit(&self, ray: &Ray, min_dist: f32, max_dist: f32) -> Option<Hit> {
 		let mut hit: Option<Hit> = None;
     	for object in &self.hittables {
-        	hit = object.hit(ray, min_dist, hit.map(|h| h.distance).unwrap_or(max_dist));
-    	}
+			let old_distance = hit.as_ref().map(|h| h.distance).unwrap_or(max_dist);
+			if let Some(new_hit) = object.hit(ray, min_dist, old_distance) {
+				if new_hit.distance < old_distance {
+					hit = Some(new_hit);
+				}
+			};
+		}
 		hit
 	}
 }

@@ -1,4 +1,7 @@
-use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign};
+use std::{
+	f32::consts::PI,
+	ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign},
+};
 
 pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f32, Output = Self> + Div<f32, Output = Self> + DivAssign<f32> + Copy {
 	fn new(x: f32, y: f32, z: f32) -> Self;
@@ -117,5 +120,17 @@ impl V3 for Vector3 {
 impl Vector3 {
 	pub fn zero() -> Self {
 		Vector3::new(0.0,0.0,0.0)
+	}
+	pub fn random_unit() -> Self {
+		// Algoritmo sacado de https://mathworld.wolfram.com/SpherePointPicking.html
+		// u y v debiesen ser en ]0,1[, no en [0,1[ pero bueno
+		let u = fastrand::f32();
+		let v = fastrand::f32();
+		let theta = 2.0*PI*u;
+		let phi = (-1.0*2.0*v).acos();
+		let x = theta.sin()*phi.cos();
+		let y = phi.sin()*theta.cos();
+		let z = phi.cos();
+		Vector3 { x, y, z }
 	}
 }
