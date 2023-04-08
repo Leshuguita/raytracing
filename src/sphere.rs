@@ -1,15 +1,15 @@
 use crate::{vector::{V3, Vector3}, hittable::{Hit, Hittable}, ray::Ray};
 pub struct Sphere {
 	pub center: Vector3,
-	pub radius: f32,
+	pub radius: f64,
 }
 impl Sphere {
-	pub fn new(center: Vector3, radius: f32) -> Self {
+	pub fn new(center: Vector3, radius: f64) -> Self {
 		Sphere { center, radius }
 	}
 }
 impl Hittable for Sphere {
-	fn hit(&self, ray: &Ray, min_dist: f32, max_dist: f32) -> Option<Hit> {
+	fn hit(&self, ray: &Ray, min_dist: f64, max_dist: f64) -> Option<Hit> {
 		let oc = ray.origin - self.center;
     	let a = ray.direction.length_squared();
    		let half_b = oc.dot(ray.direction);

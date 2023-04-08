@@ -1,11 +1,11 @@
-use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign};
+use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign, MulAssign};
 use super::vector::V3;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
-	r: f32,
-	g: f32,
-	b: f32,
+	r: f64,
+	g: f64,
+	b: f64,
 }
 
 impl Neg for Color {
@@ -39,7 +39,7 @@ impl Sub for Color {
 		self + -rhs
 	}
 }
-impl Mul<Color> for f32 {
+impl Mul<Color> for f64 {
 	type Output = Color;
 	fn mul(self, rhs: Color) -> Self::Output {
 		Color {
@@ -49,15 +49,20 @@ impl Mul<Color> for f32 {
 		}
 	}
 }
-impl Mul<f32> for Color {
+impl Mul<f64> for Color {
 	type Output = Color;
-	fn mul(self, rhs: f32) -> Self::Output {
+	fn mul(self, rhs: f64) -> Self::Output {
 		rhs * self
 	}
 }
-impl Div<f32> for Color {
+impl MulAssign<f64> for Color {
+	fn mul_assign(&mut self, rhs: f64) {
+		*self = rhs * *self
+	}
+}
+impl Div<f64> for Color {
 	type Output = Color;
-	fn div(self, rhs: f32) -> Self::Output {
+	fn div(self, rhs: f64) -> Self::Output {
 		Color {
 			r: self.r / rhs,
 			g: self.g / rhs,
@@ -65,8 +70,8 @@ impl Div<f32> for Color {
 		}
 	}
 }
-impl DivAssign<f32> for Color {
-	fn div_assign(&mut self, rhs: f32) {
+impl DivAssign<f64> for Color {
+	fn div_assign(&mut self, rhs: f64) {
 		*self = Color {
 			r: self.r / rhs,
 			g: self.g / rhs,
@@ -75,20 +80,27 @@ impl DivAssign<f32> for Color {
 	}
 }
 impl V3 for Color {
-	fn new(r: f32, g: f32, b: f32) -> Self {
+	fn new(r: f64, g: f64, b: f64) -> Self {
 		Color { r, g, b }
 	}
-	fn x(&self) -> f32 {
+	fn x(&self) -> f64 {
 		self.r
 	}
-	fn y(&self) -> f32 {
+	fn y(&self) -> f64 {
 		self.g
 	}
-	fn z(&self) -> f32 {
+	fn z(&self) -> f64 {
 		self.b
 	}
 }
 impl Color {
+	pub fn gamma_2(&self) -> Self {
+		Color {
+			r: self.r.sqrt(),
+			g: self.g.sqrt(),
+			b: self.b.sqrt(),
+		}
+	}
 	pub fn as_string_255(&self) -> String {
 		format!("{} {} {}", (255.0*self.r) as u8, (255.0*self.g) as u8, (255.0*self.b) as u8) 
 	}

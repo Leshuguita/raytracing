@@ -15,9 +15,9 @@ use crate::color::Color;
 
 fn main() {
 	// Imagen
-	let aspect_ratio: f32 = 16.0/9.0;
+	let aspect_ratio: f64 = 16.0/9.0;
 	let image_width: u16 = 400;
-	let image_height = (image_width as f32 /aspect_ratio) as u16;
+	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
 	let samples_per_pixel: u8 = 100;
 	let max_ray_iterations: u16 = 50;
@@ -37,13 +37,13 @@ fn main() {
 		for x in 0..image_width {
 			let mut color = Color::black();
 			for _ in 0..samples_per_pixel {
-				let u = (x as f32 + fastrand::f32())/ (image_width-1) as f32;
-            	let v = (y as f32 + fastrand::f32())/ (image_height-1) as f32;
+				let u = (x as f64 + fastrand::f64())/ (image_width-1) as f64;
+            	let v = (y as f64 + fastrand::f64())/ (image_height-1) as f64;
                 let ray = camera.get_ray(u, v);
-                color += ray.color(&scene, max_ray_iterations);
+                color += ray.hemisphere_color(&scene, max_ray_iterations);
             }
-			color /= samples_per_pixel as f32;
-			println!("{}", color.as_string_255());
+			color *= 1.0/samples_per_pixel as f64;
+			println!("{}", color.gamma_2().as_string_255());
 		}
 	}
 }

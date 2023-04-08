@@ -10,7 +10,7 @@ impl Camera {
 	pub fn default() -> Self {
 		Camera::new(16.0/9.0, 2.0)
 	}
- 	pub fn new(ratio: f32, viewport_height: f32) -> Self {
+ 	pub fn new(ratio: f64, viewport_height: f64) -> Self {
 		let viewport_width = ratio*viewport_height;
 		let focal_length = 1.0;
 	
@@ -22,7 +22,7 @@ impl Camera {
 
 		Camera { origin, lower_left_corner, horizontal, vertical }	
 	}
-	pub fn get_ray(&self, u: f32, v: f32) -> Ray {
+	pub fn get_ray(&self, u: f64, v: f64) -> Ray {
 		Ray::new(self.origin, self.lower_left_corner + u*self.horizontal + v*self.vertical - self.origin)
 	}
 }

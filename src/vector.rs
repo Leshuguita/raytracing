@@ -1,20 +1,20 @@
 use std::{
-	f32::consts::PI,
-	ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign},
+	f64::consts::PI,
+	ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign, MulAssign},
 };
 
-pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f32, Output = Self> + Div<f32, Output = Self> + DivAssign<f32> + Copy {
-	fn new(x: f32, y: f32, z: f32) -> Self;
-	fn x(&self) -> f32;
-	fn y(&self) -> f32;
-	fn z(&self) -> f32;
-	fn length(&self) -> f32 {
+pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f64, Output = Self> + MulAssign<f64> + Div<f64, Output = Self> + DivAssign<f64> + Copy {
+	fn new(x: f64, y: f64, z: f64) -> Self;
+	fn x(&self) -> f64;
+	fn y(&self) -> f64;
+	fn z(&self) -> f64;
+	fn length(&self) -> f64 {
 		self.length_squared().sqrt()
 	}
-	fn length_squared(&self) -> f32 {
+	fn length_squared(&self) -> f64 {
 		self.x()*self.x() + self.y()*self.y() + self.z()*self.z()
 	}
-	fn dot<T: V3>(&self, other: T) -> f32 {
+	fn dot<T: V3>(&self, other: T) -> f64 {
 		self.x() * other.x() +
 		self.y() * other.y() +
 		self.z() * other.z()
@@ -33,9 +33,9 @@ pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f32, Output = Self> + Di
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
-	x: f32,
-	y: f32,
-	z: f32,
+	x: f64,
+	y: f64,
+	z: f64,
 }
 impl Neg for Vector3 {
 	type Output = Vector3;
@@ -68,7 +68,7 @@ impl Sub for Vector3 {
 		self + -rhs
 	}
 }
-impl Mul<Vector3> for f32 {
+impl Mul<Vector3> for f64 {
 	type Output = Vector3;
 	fn mul(self, rhs: Vector3) -> Self::Output {
 		Vector3 {
@@ -78,15 +78,20 @@ impl Mul<Vector3> for f32 {
 		}
 	}
 }
-impl Mul<f32> for Vector3 {
+impl Mul<f64> for Vector3 {
 	type Output = Vector3;
-	fn mul(self, rhs: f32) -> Self::Output {
+	fn mul(self, rhs: f64) -> Self::Output {
 		rhs * self
 	}
 }
-impl Div<f32> for Vector3 {
+impl MulAssign<f64> for Vector3 {
+	fn mul_assign(&mut self, rhs: f64) {
+		*self = rhs * *self
+	}
+}
+impl Div<f64> for Vector3 {
 	type Output = Vector3;
-	fn div(self, rhs: f32) -> Self::Output {
+	fn div(self, rhs: f64) -> Self::Output {
 		Vector3 {
 			x: self.x / rhs,
 			y: self.y / rhs,
@@ -94,8 +99,8 @@ impl Div<f32> for Vector3 {
 		}
 	}
 }
-impl DivAssign<f32> for Vector3 {
-	fn div_assign(&mut self, rhs: f32) {
+impl DivAssign<f64> for Vector3 {
+	fn div_assign(&mut self, rhs: f64) {
 		*self = Vector3 {
 			x: self.x / rhs,
 			y: self.y / rhs,
@@ -104,16 +109,16 @@ impl DivAssign<f32> for Vector3 {
 	}
 }
 impl V3 for Vector3 {
-	fn new(x: f32, y: f32, z: f32) -> Self {
+	fn new(x: f64, y: f64, z: f64) -> Self {
 		Vector3 { x, y, z }
 	}
-	fn x(&self) -> f32 {
+	fn x(&self) -> f64 {
 		self.x
 	}
-	fn y(&self) -> f32 {
+	fn y(&self) -> f64 {
 		self.y
 	}
-	fn z(&self) -> f32 {
+	fn z(&self) -> f64 {
 		self.z
 	}
 }
@@ -123,14 +128,34 @@ impl Vector3 {
 	}
 	pub fn random_unit() -> Self {
 		// Algoritmo sacado de https://mathworld.wolfram.com/SpherePointPicking.html
-		// u y v debiesen ser en ]0,1[, no en [0,1[ pero bueno
-		let u = fastrand::f32();
-		let v = fastrand::f32();
+		let u = fastrand::f64();
+		let v = fastrand::f64();
+		let phi = (2.0*v-1.0).acos();
 		let theta = 2.0*PI*u;
-		let phi = (-1.0*2.0*v).acos();
-		let x = theta.sin()*phi.cos();
-		let y = phi.sin()*theta.cos();
+
+		let x = theta.cos()*phi.sin();
+		let y = theta.sin()*phi.cos();
 		let z = phi.cos();
 		Vector3 { x, y, z }
+	}
+	pub fn random() -> Self {
+		Vector3 { x: fastrand::f64()*2.0-1.0, y: fastrand::f64()*2.0-1.0, z: fastrand::f64()*2.0-1.0 }
+	}
+	pub fn random_unit_discard() -> Self {
+		loop {
+			let v = Vector3::random();
+			if v.length_squared() >= 1.0 {
+				continue
+			}
+			return v;
+		}
+	}
+	pub fn random_in_hemisphere(normal: Vector3) -> Self {
+		let unit = Vector3::random_unit();
+		if unit.dot(normal) > 0.0 {
+			unit
+		} else {
+			-unit
+		}
 	}
 }
