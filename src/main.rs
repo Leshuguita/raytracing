@@ -1,12 +1,10 @@
 mod scene;
 use scene::Scene;
 mod vector;
-use vector::{V3, Vector3};
 mod hittable;
 mod sphere;
 mod color;
 mod ray;
-use ray::Ray;
 mod utils;
 mod camera;
 use camera::Camera;
@@ -17,10 +15,10 @@ use crate::color::Color;
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 400;
+	let image_width: u16 = 1366;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
-	let samples_per_pixel: u8 = 100;
+	let samples_per_pixel: u16 = 1000;
 	let max_ray_iterations: u16 = 50;
 	// Render
 	let camera = Camera::default();
