@@ -104,6 +104,13 @@ impl V3 for Color {
 	}
 }
 impl Color {
+	pub fn rgb(r: u8, g: u8, b: u8) -> Self {
+		Color {
+			r: r as f64/255.0,
+			g: g as f64/255.0,
+			b: b as f64/255.0,
+		}
+	}
 	pub fn gamma_2(&self) -> Self {
 		Color {
 			r: self.r.sqrt(),

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{vector::Vector3, ray::Ray, material::Material, color::Color};
+use crate::{vector::Vector3, ray::Ray, material::Material};
 
 pub struct Hit {
 	pub point: Vector3,
