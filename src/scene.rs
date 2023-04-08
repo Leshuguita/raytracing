@@ -1,4 +1,4 @@
-use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}};
+use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::Lambertian, color::Color};
 pub struct Scene {
 	// El tutorial usa el equivalente a Vec<Arc<T>>, dice que para que puedan
 	// compartir texturas y eso. No se si sea necesario, por ahora lo voy a
@@ -9,8 +9,8 @@ impl Scene {
 	pub fn default() -> Self {
 		Scene {
 			hittables: vec![
-				Box::new(Sphere::new(Vector3::new(-1.0, 0.0, -1.0), 0.5)),
-				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0)),
+				Box::new(Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5, Lambertian::new_box(&Color::grey()))),
+				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0,  Lambertian::new_box(&Color::grey()))),
 			]
 		}
 	}

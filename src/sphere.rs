@@ -1,11 +1,14 @@
-use crate::{vector::{V3, Vector3}, hittable::{Hit, Hittable}, ray::Ray};
+use std::sync::Arc;
+
+use crate::{vector::{V3, Vector3}, hittable::{Hit, Hittable}, ray::Ray, material::Material};
 pub struct Sphere {
 	pub center: Vector3,
 	pub radius: f64,
+	pub material: Arc<Box<dyn Material>>,
 }
 impl Sphere {
-	pub fn new(center: Vector3, radius: f64) -> Self {
-		Sphere { center, radius }
+	pub fn new(center: Vector3, radius: f64, material: Box<dyn Material>) -> Self {
+		Sphere { center, radius, material: Arc::new(material) }
 	}
 }
 impl Hittable for Sphere {
@@ -42,6 +45,7 @@ impl Hittable for Sphere {
 				normal,
 				distance: root,
 				front_face,
+				material: self.material.clone(),
 			}
 		)
 	}

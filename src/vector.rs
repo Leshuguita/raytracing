@@ -3,7 +3,7 @@ use std::{
 	ops::{Add, Sub, Mul, Div, Neg, AddAssign, DivAssign, MulAssign},
 };
 
-pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f64, Output = Self> + MulAssign<f64> + Div<f64, Output = Self> + DivAssign<f64> + Copy {
+pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul + Mul<f64, Output = Self> + MulAssign<f64> + Div<f64, Output = Self> + DivAssign<f64> + Copy {
 	fn new(x: f64, y: f64, z: f64) -> Self;
 	fn x(&self) -> f64;
 	fn y(&self) -> f64;
@@ -28,6 +28,9 @@ pub trait V3: Sized + Add + AddAssign + Sub + Neg + Mul<f64, Output = Self> + Mu
 	}
 	fn unit(&self) -> Self {
 		*self/self.length()
+	}
+	fn near_zero(&self) -> bool {
+		self.x() < f64::EPSILON && self.y() < f64::EPSILON && self.z() < f64::EPSILON
 	}
 }
 
@@ -75,6 +78,16 @@ impl Mul<Vector3> for f64 {
 			x: self * rhs.x,
 			y: self * rhs.y,
 			z: self * rhs.z,
+		}
+	}
+}
+impl Mul for Vector3 {
+	type Output = Vector3;
+	fn mul(self, rhs: Vector3) -> Self::Output {
+		Vector3 {
+			x: self.x * rhs.x,
+			y: self.y * rhs.y,
+			z: self.z * rhs.z,
 		}
 	}
 }
@@ -150,9 +163,9 @@ impl Vector3 {
 			return v;
 		}
 	}
-	pub fn random_in_hemisphere(normal: Vector3) -> Self {
+	pub fn random_in_hemisphere(normal: &Vector3) -> Self {
 		let unit = Vector3::random_unit();
-		if unit.dot(normal) > 0.0 {
+		if unit.dot(*normal) > 0.0 {
 			unit
 		} else {
 			-unit
