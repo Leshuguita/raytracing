@@ -17,10 +17,26 @@ impl Scene {
 	pub fn metal_balls() -> Self {
 		Scene {
 			hittables: vec![
-				Box::new(Sphere::new(Vector3::new(-1.0, 0.0, -1.0), 0.5, Metal::new_box(&Color::new(0.8, 0.8, 0.8)))),
-				Box::new(Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5, Lambertian::new_box(&Color::new(0.7, 0.3, 0.3)))),
-				Box::new(Sphere::new(Vector3::new(1.0, 0.0, -1.0), 0.5, Metal::new_box(&Color::new(0.8, 0.6, 0.2)))),
-				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0,  Lambertian::new_box(&Color::new(0.8, 0.8, 0.0)))),
+				Box::new(Sphere::new(
+					Vector3::new(-1.0, 0.0, -1.0),
+					0.5,
+					Metal::new_box(&Color::new(0.8, 0.8, 0.8), 0.3)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, 0.0, -1.0),
+					0.5, 
+					Lambertian::new_box(&Color::new(0.7, 0.3, 0.3))
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(1.0, 0.0, -1.0),
+					0.5,
+					Metal::new_box(&Color::new(0.8, 0.6, 0.2), 1.0)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, -100.5, -1.0),
+					100.0,
+					Lambertian::new_box(&Color::new(0.8, 0.8, 0.0))
+				)),
 			]
 		}
 	}

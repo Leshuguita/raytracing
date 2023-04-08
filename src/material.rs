@@ -44,11 +44,12 @@ impl Hemisphere {
 
 pub struct Metal {
 	albedo: Color,
+	fuzz: f64,
 }
 impl Material for Metal {
 	fn scatter(&self, ray_in: &Ray, hit: &Hit) -> Option<(Ray, Color)> {
 		let reflected = ray_in.direction.unit().reflect(&hit.normal);
-		let scattered = Ray::new(hit.point, reflected);
+		let scattered = Ray::new(hit.point, reflected + self.fuzz*Vector3::random_unit());
 		if scattered.direction.dot(hit.normal) > 0.0 {
 			Some((scattered, self.albedo))
 		} else {
@@ -57,7 +58,7 @@ impl Material for Metal {
 	}
 }
 impl Metal {
-	pub fn new_box(color: &Color) -> Box<Self> {
-		Box::new(Metal { albedo: *color })
+	pub fn new_box(color: &Color, fuzz: f64) -> Box<Self> {
+		Box::new(Metal { albedo: *color, fuzz})
 	}
 }
