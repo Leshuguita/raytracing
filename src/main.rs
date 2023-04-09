@@ -15,11 +15,11 @@ use crate::{color::Color, vector::{Vector3, V3}};
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 400;
+	let image_width: u16 = 1366;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
 	let samples_per_pixel: u16 = 100;
-	let max_ray_iterations: u16 = 100;
+	let max_ray_iterations: u16 = 50;
 	// Render
 	let position = Vector3::new(3.0, 3.0, 2.0);
 	let target = Vector3::new(0.0, 0.0, -1.0);
