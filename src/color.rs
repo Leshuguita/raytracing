@@ -121,6 +121,9 @@ impl Color {
 	pub fn as_string_255(&self) -> String {
 		format!("{} {} {}", (255.0*self.r) as u8, (255.0*self.g) as u8, (255.0*self.b) as u8) 
 	}
+	pub fn random() -> Self {
+		Color { r: fastrand::f64(), g: fastrand::f64(), b: fastrand::f64() }
+	}
 	pub fn black() -> Self {
 		Color{r:0.0, g:0.0, b:0.0}
 	}

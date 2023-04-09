@@ -1,6 +1,6 @@
 use crate::{hittable::Hit, color::Color, ray::Ray, vector::{Vector3, V3}};
 
-pub trait Material {
+pub trait Material: Sync + Send {
 	fn scatter(&self, ray_in: &Ray, hit: &Hit) -> Option<(Ray, Color)>;
 }
 

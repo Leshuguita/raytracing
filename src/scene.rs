@@ -1,6 +1,6 @@
 use std::f64::consts::PI;
 
-use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::{Lambertian, Metal, Dielectric, Hemisphere}, color::Color};
+use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable, self}, material::{Lambertian, Metal, Dielectric, Hemisphere}, color::{Color, self}};
 pub struct Scene {
 	// El tutorial usa el equivalente a Vec<Arc<T>>, dice que para que puedan
 	// compartir texturas y eso. No se si sea necesario, por ahora lo voy a
@@ -115,6 +115,69 @@ impl Scene {
 				)),
 			]
 		}
+	}
+	pub fn random() -> Self {
+		let mut hittables: Vec<Box<dyn Hittable>> = vec![
+			Box::new(Sphere::new(
+				Vector3::new(0.0, -1000.0, 0.0),
+				1000.0,
+				Lambertian::new_box(Color::grey())
+			))
+		];
+		for a in -11..11 {
+			for b in -11..11 {
+				let choose_material = fastrand::f64();
+				let center = Vector3::new(a as f64 + 0.9*fastrand::f64(), 0.2, b as f64 + 0.9*fastrand::f64());
+				if (center-Vector3::new(40.0, 0.2, 0.0)).length() > 0.9 {
+					hittables.push(
+						Box::new(Sphere::new(
+							center,
+							0.2,
+							if choose_material < 0.8 {
+								// difuso
+								let albedo = Color::random()*Color::random();
+								Lambertian::new_box(albedo)
+							} else if choose_material < 0.95 {
+								// metal
+								let albedo = Color::random() * 0.5 + Color::grey();
+								let fuzz = fastrand::f64();
+								Metal::new_box(albedo, fuzz)
+							} else {
+								// glass
+								let albedo = Color::random() * 0.5 + Color::grey();
+								Dielectric::new_box(albedo, fastrand::f64() * 2.0 + 1.5)
+							}
+						))
+					)
+				}
+			}
+		}
+
+		hittables.push(
+			Box::new(Sphere::new(
+				Vector3::new(0.0, 1.0, 0.0),
+				1.0,
+				Dielectric::new_box(Color::white(), 1.5)
+			))
+		);
+
+		hittables.push(
+			Box::new(Sphere::new(
+				Vector3::new(-4.0, 1.0, 0.0),
+				1.0,
+				Lambertian::new_box(Color::new(0.4, 0.2, 0.1))
+			))
+		);
+
+		hittables.push(
+			Box::new(Sphere::new(
+				Vector3::new(4.0, 1.0, 0.0),
+				1.0,
+				Metal::new_box(Color::new(0.7, 0.6, 0.5), 0.01)
+			))
+		);
+
+		Scene { hittables }
 	}
 }
 impl Hittable for Scene {

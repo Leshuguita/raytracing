@@ -9,6 +9,6 @@ pub struct Hit {
 	pub front_face: bool,
 	pub material: Arc<Box<dyn Material>>,
 }
-pub trait Hittable {
+pub trait Hittable: Sync {
 	fn hit(&self, ray: &Ray, min_dist: f64, max_dist: f64) -> Option<Hit>;
 }

@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use crate::{vector::{V3, Vector3}, hittable::{Hit, Hittable}, ray::Ray, material::Material};
+
 pub struct Sphere {
 	pub center: Vector3,
 	pub radius: f64,

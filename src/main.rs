@@ -10,27 +10,29 @@ mod camera;
 use camera::Camera;
 mod material;
 
+use rayon::prelude::*;
+
 use crate::{color::Color, vector::{Vector3, V3}};
 
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 1366;
+	let image_width: u16 = 300;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
-	let samples_per_pixel: u16 = 100;
+	let samples_per_pixel: u16 = 500;
 	let max_ray_iterations: u16 = 50;
 	// Render
-	let position = Vector3::new(3.0, 3.0, 2.0);
-	let target = Vector3::new(0.0, 0.0, -1.0);
+	let position = Vector3::new(13.0, 2.0, 3.0);
+	let target = Vector3::new(0.0, 0.0, 0.0);
 	let camera = Camera::new(
 		position,
 		target,
 		Vector3::new(0.0, 1.0, 0.0),
 		20.0,
 		aspect_ratio,
-		2.0,
-		(position - target).length(),
+		0.01,
+		10.0,
 	);
 	// Esta en ascii
 	println!("P3");
@@ -39,11 +41,12 @@ fn main() {
 	// valor maximo
 	println!("255");
 
-	let scene = Scene::glass_bubble();
+	let scene = Scene::random();
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);
-		for x in 0..image_width {
+		(0..image_width).into_par_iter().for_each(|x| {
+			eprintln!("iniciando {},{}", x, y);
 			let mut color = Color::black();
 			for _ in 0..samples_per_pixel {
 				let u = (x as f64 + fastrand::f64())/ (image_width-1) as f64;
@@ -53,6 +56,6 @@ fn main() {
             }
 			color *= 1.0/samples_per_pixel as f64;
 			println!("{}", color.gamma_2().as_string_255());
-		}
+		})
 	}
 }
