@@ -15,10 +15,10 @@ use crate::color::Color;
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 1366;
+	let image_width: u16 = 400;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
-	let samples_per_pixel: u16 = 1000;
+	let samples_per_pixel: u16 = 100;
 	let max_ray_iterations: u16 = 50;
 	// Render
 	let camera = Camera::default();
@@ -29,7 +29,7 @@ fn main() {
 	// valor maximo
 	println!("255");
 
-	let scene = Scene::metal_balls();
+	let scene = Scene::glass_balls();
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);

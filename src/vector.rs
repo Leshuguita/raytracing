@@ -174,4 +174,10 @@ impl Vector3 {
 	pub fn reflect(&self, normal: &Vector3) -> Vector3 {
 		*self - 2.0*self.dot(*normal)*(*normal)
 	}
+	pub fn refract(&self, normal: &Vector3, refractive_index_ratio: f64) -> Vector3 {
+		let cos_theta = (-*self).dot(*normal).min(1.0);
+		let r_out_perpendicular = refractive_index_ratio * (*self + cos_theta**normal);
+		let r_out_parallel = (-(1.0 - r_out_perpendicular.length_squared()).abs().sqrt()) * *normal;
+		r_out_perpendicular + r_out_parallel
+	}
 }

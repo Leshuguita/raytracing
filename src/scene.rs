@@ -1,4 +1,4 @@
-use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::{Lambertian, Metal}, color::Color};
+use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::{Lambertian, Metal, Dielectric}, color::Color};
 pub struct Scene {
 	// El tutorial usa el equivalente a Vec<Arc<T>>, dice que para que puedan
 	// compartir texturas y eso. No se si sea necesario, por ahora lo voy a
@@ -26,6 +26,32 @@ impl Scene {
 					Vector3::new(0.0, -0.2, -1.0),
 					0.4, 
 					Lambertian::new_box(&Color::new(0.7, 0.3, 0.3))
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(1.0, 0.0, -1.0),
+					0.5,
+					Metal::new_box(&Color::new(0.8, 0.6, 0.2), 0.7)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, -100.5, -1.0),
+					100.0,
+					Lambertian::new_box(&Color::rgb(34, 130, 25))
+				)),
+			]
+		}
+	}
+	pub fn glass_balls() -> Self {
+		Scene {
+			hittables: vec![
+				Box::new(Sphere::new(
+					Vector3::new(-1.0, 0.1, -1.0),
+					0.6,
+					Dielectric::new_box(1.5)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, -0.2, -1.0),
+					0.4, 
+					Dielectric::new_box(1.5)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(1.0, 0.0, -1.0),
