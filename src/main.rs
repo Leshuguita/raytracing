@@ -17,7 +17,7 @@ use crate::{color::Color, vector::{Vector3, V3}};
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 300;
+	let image_width: u16 = 1200;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
 	let samples_per_pixel: u16 = 500;
@@ -45,8 +45,7 @@ fn main() {
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);
-		(0..image_width).into_par_iter().for_each(|x| {
-			eprintln!("iniciando {},{}", x, y);
+		let pixels: Vec<Color> = (0..image_width).into_par_iter().map(|x| {
 			let mut color = Color::black();
 			for _ in 0..samples_per_pixel {
 				let u = (x as f64 + fastrand::f64())/ (image_width-1) as f64;
@@ -55,7 +54,10 @@ fn main() {
                 color += ray.color(&scene, max_ray_iterations);
             }
 			color *= 1.0/samples_per_pixel as f64;
-			println!("{}", color.gamma_2().as_string_255());
-		})
+			color.gamma_2()
+		}).collect();
+		for pixel in pixels {
+			println!("{}", pixel.as_string_255());
+		}
 	}
 }
