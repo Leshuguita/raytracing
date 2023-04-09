@@ -18,8 +18,8 @@ impl Material for Lambertian {
 	}
 }
 impl Lambertian {
-	pub fn new_box(color: &Color) -> Box<Self> {
-		Box::new(Lambertian { albedo: *color })
+	pub fn new_box(color: Color) -> Box<Self> {
+		Box::new(Lambertian { albedo: color })
 	}
 }
 
@@ -37,8 +37,8 @@ impl Material for Hemisphere {
 	}
 }
 impl Hemisphere {
-	pub fn new_box(color: &Color) -> Box<Self> {
-		Box::new(Hemisphere { albedo: *color })
+	pub fn new_box(color: Color) -> Box<Self> {
+		Box::new(Hemisphere { albedo: color })
 	}
 }
 
@@ -58,13 +58,14 @@ impl Material for Metal {
 	}
 }
 impl Metal {
-	pub fn new_box(color: &Color, fuzz: f64) -> Box<Self> {
-		Box::new(Metal { albedo: *color, fuzz})
+	pub fn new_box(color: Color, fuzz: f64) -> Box<Self> {
+		Box::new(Metal { albedo: color, fuzz})
 	}
 }
 
 pub struct Dielectric {
 	refraction_index: f64,
+	albedo: Color,
 }
 impl Material for Dielectric {
 	fn scatter(&self, ray_in: &Ray, hit: &Hit) -> Option<(Ray, Color)> {
@@ -87,7 +88,7 @@ impl Material for Dielectric {
 		};
 
 		let scattered = Ray::new(hit.point, direction);
-		Some((scattered, atennuation))
+		Some((scattered, self.albedo))
 	}
 }
 impl Dielectric {
@@ -96,7 +97,7 @@ impl Dielectric {
 		let r0 = r0*r0;
 		r0 + (1.0-r0)*(1.0-cosine).powi(5) 
 	}
-	pub fn new_box(refraction_index: f64) -> Box<Self> {
-		Box::new(Dielectric { refraction_index})
+	pub fn new_box(color: Color, refraction_index: f64) -> Box<Self> {
+		Box::new(Dielectric { refraction_index, albedo: color })
 	}
 }

@@ -9,8 +9,8 @@ impl Scene {
 	pub fn gray_balls() -> Self {
 		Scene {
 			hittables: vec![
-				Box::new(Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5, Lambertian::new_box(&Color::grey()))),
-				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0,  Lambertian::new_box(&Color::grey()))),
+				Box::new(Sphere::new(Vector3::new(0.0, 0.0, -1.0), 0.5, Lambertian::new_box(Color::grey()))),
+				Box::new(Sphere::new(Vector3::new(0.0, -100.5, -1.0), 100.0,  Lambertian::new_box(Color::grey()))),
 			]
 		}
 	}
@@ -20,22 +20,22 @@ impl Scene {
 				Box::new(Sphere::new(
 					Vector3::new(-1.0, 0.1, -1.0),
 					0.6,
-					Metal::new_box(&Color::new(0.8, 0.8, 0.8), 0.1)
+					Metal::new_box(Color::new(0.8, 0.8, 0.8), 0.1)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(0.0, -0.2, -1.0),
 					0.4, 
-					Lambertian::new_box(&Color::new(0.7, 0.3, 0.3))
+					Lambertian::new_box(Color::new(0.7, 0.3, 0.3))
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(1.0, 0.0, -1.0),
 					0.5,
-					Metal::new_box(&Color::new(0.8, 0.6, 0.2), 0.7)
+					Metal::new_box(Color::new(0.8, 0.6, 0.2), 0.7)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(0.0, -100.5, -1.0),
 					100.0,
-					Lambertian::new_box(&Color::rgb(34, 130, 25))
+					Lambertian::new_box(Color::rgb(34, 130, 25))
 				)),
 			]
 		}
@@ -46,22 +46,22 @@ impl Scene {
 				Box::new(Sphere::new(
 					Vector3::new(-1.0, 0.1, -1.0),
 					0.6,
-					Dielectric::new_box(1.5)
+					Dielectric::new_box(Color::rgb(255, 55, 48), 1.5)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(0.0, -0.2, -1.0),
 					0.4, 
-					Dielectric::new_box(1.5)
+					Dielectric::new_box(Color::rgb(255, 209, 84), 10.0)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(1.0, 0.0, -1.0),
 					0.5,
-					Metal::new_box(&Color::new(0.8, 0.6, 0.2), 0.7)
+					Metal::new_box(Color::new(0.8, 0.6, 0.2), 0.7)
 				)),
 				Box::new(Sphere::new(
 					Vector3::new(0.0, -100.5, -1.0),
 					100.0,
-					Lambertian::new_box(&Color::rgb(34, 130, 25))
+					Lambertian::new_box(Color::rgb(34, 130, 25))
 				)),
 			]
 		}
