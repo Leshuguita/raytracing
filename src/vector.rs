@@ -171,6 +171,10 @@ impl Vector3 {
 			-unit
 		}
 	}
+	pub fn random_unit_disk() -> Self {
+		let random = Self::random_unit();
+		Vector3 { x: random.x, y: random.y, z: 0.0 }
+	}
 	pub fn reflect(&self, normal: &Vector3) -> Vector3 {
 		*self - 2.0*self.dot(*normal)*(*normal)
 	}
