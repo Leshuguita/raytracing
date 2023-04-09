@@ -69,7 +69,6 @@ pub struct Dielectric {
 }
 impl Material for Dielectric {
 	fn scatter(&self, ray_in: &Ray, hit: &Hit) -> Option<(Ray, Color)> {
-		let atennuation = Color::white();
 		let refraction_ratio = if hit.front_face {
 			1.0/self.refraction_index
 		} else {

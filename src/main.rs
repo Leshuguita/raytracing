@@ -10,7 +10,7 @@ mod camera;
 use camera::Camera;
 mod material;
 
-use crate::color::Color;
+use crate::{color::Color, vector::{Vector3, V3}};
 
 fn main() {
 	// Imagen
@@ -21,7 +21,13 @@ fn main() {
 	let samples_per_pixel: u16 = 100;
 	let max_ray_iterations: u16 = 100;
 	// Render
-	let camera = Camera::default();
+	let camera = Camera::new(
+		Vector3::new(-2.0, 2.0, 1.0),
+		Vector3::new(0.0, 0.0, -1.0),
+		Vector3::new(0.0, 1.0, 0.0),
+		90.0,
+		aspect_ratio,
+	);
 	// Esta en ascii
 	println!("P3");
 	// filas y columnas
@@ -29,7 +35,7 @@ fn main() {
 	// valor maximo
 	println!("255");
 
-	let scene = Scene::two_balls();
+	let scene = Scene::glass_bubble();
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);

@@ -42,7 +42,38 @@ impl Scene {
 			]
 		}
 	}
-	pub fn glass_balls() -> Self {
+	pub fn glass_bubble() -> Self {
+		Scene {
+			hittables: vec![
+				Box::new(Sphere::new(
+					Vector3::new(-1.0, 0.0, -1.0),
+					0.5,
+					Dielectric::new_box(Color::white(), 1.5)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(-1.0, 0.0, -1.0),
+					-0.45,
+					Dielectric::new_box(Color::white(), 1.5)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, 0.0, -1.0),
+					0.5, 
+					Lambertian::new_box(Color::new(0.1, 0.2, 0.5))
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(1.0, 0.0, -1.0),
+					0.5,
+					Metal::new_box(Color::new(0.8, 0.6, 0.2), 0.1)
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(0.0, -100.5, -1.0),
+					100.0,
+					Lambertian::new_box(Color::new(0.8, 0.8, 0.0))
+				)),
+			]
+		}
+	}
+	pub fn glass_color_balls() -> Self {
 		Scene {
 			hittables: vec![
 				Box::new(Sphere::new(
