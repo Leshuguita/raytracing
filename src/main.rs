@@ -1,4 +1,6 @@
 mod scene;
+use std::time::Instant;
+
 use scene::Scene;
 mod vector;
 mod hittable;
@@ -17,7 +19,7 @@ use crate::{color::Color, vector::{Vector3, V3}};
 fn main() {
 	// Imagen
 	let aspect_ratio: f64 = 16.0/9.0;
-	let image_width: u16 = 1200;
+	let image_width: u16 = 600;
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
 	let samples_per_pixel: u16 = 500;
@@ -42,9 +44,9 @@ fn main() {
 	println!("255");
 
 	let scene = Scene::random();
-
+	let start = Instant::now();
 	for y in (0..image_height).rev() {
-		eprintln!("{}/{} filas", image_height-y, image_height);
+		eprintln!("Renderizando fila {} de {}", image_height-y, image_height);
 		let pixels: Vec<Color> = (0..image_width).into_par_iter().map(|x| {
 			let mut color = Color::black();
 			for _ in 0..samples_per_pixel {
@@ -59,5 +61,14 @@ fn main() {
 		for pixel in pixels {
 			println!("{}", pixel.as_string_255());
 		}
+		let now = Instant::now();
+		let average = now.duration_since(start)/(image_height-y).into();
+		let remaining = average * y.into();
+		eprintln!("Tiempo estimado: {}", secs_to_string(remaining.as_secs()));
 	}
+}
+
+fn secs_to_string(secs: u64) -> String {
+	let mins = secs/60;
+	format!("{}m {}s", mins, secs-(mins*60))
 }
