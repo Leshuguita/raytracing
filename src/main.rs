@@ -19,7 +19,7 @@ fn main() {
 	let image_height = (image_width as f64 /aspect_ratio) as u16;
 	
 	let samples_per_pixel: u16 = 100;
-	let max_ray_iterations: u16 = 50;
+	let max_ray_iterations: u16 = 100;
 	// Render
 	let camera = Camera::default();
 	// Esta en ascii
@@ -29,7 +29,7 @@ fn main() {
 	// valor maximo
 	println!("255");
 
-	let scene = Scene::glass_balls();
+	let scene = Scene::two_balls();
 
 	for y in (0..image_height).rev() {
 		eprintln!("{}/{} filas", image_height-y, image_height);

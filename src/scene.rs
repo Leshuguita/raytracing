@@ -1,4 +1,6 @@
-use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::{Lambertian, Metal, Dielectric}, color::Color};
+use std::f64::consts::PI;
+
+use crate::{ray::Ray, sphere::Sphere, vector::{Vector3, V3}, hittable::{Hit, Hittable}, material::{Lambertian, Metal, Dielectric, Hemisphere}, color::Color};
 pub struct Scene {
 	// El tutorial usa el equivalente a Vec<Arc<T>>, dice que para que puedan
 	// compartir texturas y eso. No se si sea necesario, por ahora lo voy a
@@ -62,6 +64,23 @@ impl Scene {
 					Vector3::new(0.0, -100.5, -1.0),
 					100.0,
 					Lambertian::new_box(Color::rgb(34, 130, 25))
+				)),
+			]
+		}
+	}
+	pub fn two_balls() -> Self {
+		let r = (PI/4.0).cos();
+		Scene {
+			hittables: vec![
+				Box::new(Sphere::new(
+					Vector3::new(-r, 0.0, -1.0),
+					r,
+					Lambertian::new_box(Color::new(0.0, 0.0, 1.0))
+				)),
+				Box::new(Sphere::new(
+					Vector3::new(r, 0.0, -1.0),
+					r,
+					Lambertian::new_box(Color::new(1.0, 0.0, 0.0))
 				)),
 			]
 		}

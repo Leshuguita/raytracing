@@ -8,9 +8,12 @@ pub struct Camera {
 }
 impl Camera {
 	pub fn default() -> Self {
-		Camera::new(16.0/9.0, 2.0)
+		Camera::new(16.0/9.0, 90.0)
 	}
- 	pub fn new(ratio: f64, viewport_height: f64) -> Self {
+ 	pub fn new(ratio: f64, vertical_fov_deg: f64) -> Self {
+		let theta = vertical_fov_deg.to_radians();
+		let h = (theta/2.0).tan();
+		let viewport_height = 2.0*h;
 		let viewport_width = ratio*viewport_height;
 		let focal_length = 1.0;
 	
