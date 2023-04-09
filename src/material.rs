@@ -78,12 +78,12 @@ impl Material for Dielectric {
 		let cos_theta = (-unit_direction).dot(hit.normal).min(1.0);
 		let sin_theta = (1.0 - cos_theta*cos_theta).sqrt();
 
-		let can_refract = refraction_ratio*sin_theta <= 1.0;
+		let cannot_refract = refraction_ratio*sin_theta > 1.0;
 		
-		let direction = if can_refract {
-			unit_direction.refract(&hit.normal, refraction_ratio)
-		} else {
+		let direction = if cannot_refract || Self::reflectance(cos_theta, refraction_ratio) > fastrand::f64() {
 			unit_direction.reflect(&hit.normal)
+		} else {
+			unit_direction.refract(&hit.normal, refraction_ratio)
 		};
 
 		let scattered = Ray::new(hit.point, direction);
@@ -91,6 +91,11 @@ impl Material for Dielectric {
 	}
 }
 impl Dielectric {
+	fn reflectance(cosine: f64, refraction_index: f64) -> f64 {
+		let r0 = (1.0-refraction_index)/(1.0+refraction_index);
+		let r0 = r0*r0;
+		r0 + (1.0-r0)*(1.0-cosine).powi(5) 
+	}
 	pub fn new_box(refraction_index: f64) -> Box<Self> {
 		Box::new(Dielectric { refraction_index})
 	}
